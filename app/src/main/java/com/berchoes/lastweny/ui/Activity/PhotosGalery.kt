@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder
 import com.squareup.otto.Bus
 import com.squareup.otto.ThreadEnforcer
 import com.squareup.picasso.Picasso
-import com.berchoes.lastweny.network.Service.PhotoInfoRestApi
 import com.berchoes.lastweny.network.Service.PhotoService
 import com.berchoes.lastweny.network.Service.RecentPhotosRestApi
 import retrofit2.Retrofit
@@ -30,8 +29,7 @@ class PhotoGalery : Application() {
         bus.register(
             PhotoService(
                 bus,
-                retrofit.create<RecentPhotosRestApi.GetRecentImages>(RecentPhotosRestApi.GetRecentImages::class.java),
-                retrofit.create<PhotoInfoRestApi.GetPhotoInfo>(PhotoInfoRestApi.GetPhotoInfo::class.java)
+                retrofit.create<RecentPhotosRestApi.GetRecentImages>(RecentPhotosRestApi.GetRecentImages::class.java)
             )
         )
         val picasso = Picasso.Builder(context)

@@ -5,7 +5,6 @@ import com.squareup.otto.Bus
 import com.squareup.otto.Subscribe
 import com.berchoes.lastweny.network.AppEvent.ApiError
 import com.berchoes.lastweny.network.AppEvent.AppEvents
-import com.berchoes.lastweny.Model.PhotoInfoParent
 import com.berchoes.lastweny.Model.PhotosParent
 import com.berchoes.lastweny.ui.Activity.PhotoGalery
 import retrofit2.Call
@@ -15,8 +14,7 @@ import retrofit2.Response
 
 class PhotoService(
     private val mBus: Bus,
-    private val recentImagesRestApi: RecentPhotosRestApi.GetRecentImages,
-    private val photoInfoRestApi: PhotoInfoRestApi.GetPhotoInfo
+    private val recentImagesRestApi: RecentPhotosRestApi.GetRecentImages
 ) {
     private val s = "AuthService"
 
@@ -44,26 +42,5 @@ class PhotoService(
                     mBus.post(ApiError())
                 }
             })
-    }
-
-    @Subscribe
-    fun getPhotoInfo(event: AppEvents.PhotoInfoRequest) {
-        Log.d(s, "SERVICE PHOTO ID: " + event.photoId)
-        photoInfoRestApi.getPhotoInfo(PhotoGalery.API_KEY, "json", 1, event.photoId).enqueue(object :
-            Callback<PhotoInfoParent> {
-            override fun onResponse(call: Call<PhotoInfoParent>, response: Response<PhotoInfoParent>) {
-                Log.d(
-                    s,
-                    "ON RESPONSE photoInfo: " + response.isSuccessful + " - responsecode: " + response.code() + " - response:" + response.message()
-                )
-                Log.d(s, "CALL URL : " + call.request().url())
-            }
-
-            override fun onFailure(call: Call<PhotoInfoParent>, t: Throwable) {
-                Log.d(s, "ON FAILURE: " + t.message)
-                t.printStackTrace()
-                mBus.post(ApiError())
-            }
-        })
     }
 }
